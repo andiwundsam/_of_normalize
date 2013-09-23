@@ -1183,13 +1183,11 @@ class ofp_match (ofp_base):
       packed += self.dl_dst.toRaw()
 
     def check_ip(val):
-      return (val or 0) if self.dl_type == 0x0800 else 0
+      return (val or 0)
     def check_ip_or_arp(val):
-      return (val or 0) if self.dl_type == 0x0800 \
-                           or self.dl_type == 0x0806 else 0
+      return (val or 0)
     def check_tp(val):
-      return (val or 0) if self.dl_type == 0x0800 \
-                           and self.nw_proto in (1,6,17) else 0
+      return (val or 0)
 
     packed += struct.pack("!HB", self.dl_vlan or 0, self.dl_vlan_pcp or 0)
     packed += _PAD # Hardcode padding

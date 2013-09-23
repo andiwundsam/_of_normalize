@@ -25,9 +25,16 @@ log = core.getLogger()
 
 def _handle_ConnectionUp (event):
   msg = of.ofp_flow_mod()
+  #msg.match.dl_type = 0x800
+  msg.match.tp_dst = 80
+  msg.match.set_nw_src("1.2.3.0/24")
   msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
   event.connection.send(msg)
   log.info("Hubifying %s", dpidToStr(event.dpid))
+  stats_req = of.ofp_stats_request()
+  stats_req.body = of.ofp_flow_stats_request()
+  event.connection.send(stats_req)
+
 
 def launch ():
   core.openflow.addListenerByName("ConnectionUp", _handle_ConnectionUp)
